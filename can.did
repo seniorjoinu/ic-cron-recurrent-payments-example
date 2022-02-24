@@ -1,0 +1,52 @@
+type TaskId = nat64;
+
+type Iterations = variant {
+    Infinite;
+    Exact : nat64;
+};
+
+type SchedulingInterval = record {
+    delay_nano : nat64;
+    interval_nano : nat64;
+    iterations : Iterations;
+};
+
+type RecurrentTransferTaskExt = record {
+    task_id : TaskId;
+    from : principal;
+    to : principal;
+    qty : nat64;
+    scheduled_at : nat64;
+    rescheduled_at : opt nat64;
+    scheduling_interval : SchedulingInterval;
+};
+
+type RecurrentMintTaskExt = record {
+    task_id : TaskId;
+    to : principal;
+    qty : nat64;
+    scheduled_at : nat64;
+    rescheduled_at : opt nat64;
+    scheduling_interval : SchedulingInterval;
+};
+
+type TokenInfo = record {
+    name : text;
+    symbol : text;
+    decimals : nat8;
+};
+
+service : (principal, TokenInfo) -> {
+    "mint" : (principal, nat64, opt SchedulingInterval) -> ();
+    "transfer" : (principal, nat64, opt SchedulingInterval) -> ();
+    "burn" : (nat64) -> ();
+    "get_balance_of" : (principal) -> (nat64) query;
+    "get_total_supply" : () -> (nat64) query;
+    "get_info" : () -> (TokenInfo) query;
+
+    "cancel_recurrent_mint_task" : (TaskId) -> (bool);
+    "get_recurrent_mint_tasks" : () -> (vec RecurrentMintTaskExt) query;
+
+    "cancel_my_recurrent_transfer_task" : (TaskId) -> (bool);
+    "get_my_recurrent_transfer_tasks" : () -> (vec RecurrentTransferTaskExt) query;
+}

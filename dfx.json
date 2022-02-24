@@ -1,0 +1,23 @@
+{
+  "canisters": {
+    "ic-cron-recurrent-payments-example": {
+      "build": "./build.sh",
+      "candid": "./can.did",
+      "wasm": "./target/wasm32-unknown-unknown/release/ic-cron-recurrent-payments-example-opt.wasm",
+      "type": "custom"
+    }
+  },
+  "defaults": {
+    "build": {
+      "packtool": ""
+    }
+  },
+  "dfx": "0.9.0",
+  "networks": {
+    "local": {
+      "bind": "127.0.0.1:8000",
+      "type": "ephemeral"
+    }
+  },
+  "version": 1
+}
