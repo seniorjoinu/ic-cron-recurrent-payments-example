@@ -81,13 +81,6 @@ impl CurrencyToken {
         Ok(())
     }
 
-    pub fn update_info(&mut self, new_info: TokenInfo) -> TokenInfo {
-        let old_info = self.info.clone();
-        self.info = new_info;
-
-        old_info
-    }
-
     pub fn balance_of(&self, account_owner: &Principal) -> u64 {
         match self.balances.get(account_owner) {
             None => 0,
@@ -258,32 +251,5 @@ mod tests {
         token.transfer(user_2, user_1, 1).err().unwrap();
 
         token.transfer(user_2, user_1, 0).err().unwrap();
-    }
-
-    #[test]
-    fn info_update_works_well() {
-        let (mut token, _) = create_currency_token();
-
-        let new_info_1 = TokenInfo {
-            name: String::from("name 1"),
-            symbol: String::from("NME1"),
-            decimals: 9,
-        };
-        token.update_info(new_info_1);
-
-        assert_eq!(token.info.name, String::from("name 1"));
-        assert_eq!(token.info.symbol, String::from("NME1"));
-        assert_eq!(token.info.decimals, 9);
-
-        let new_info_2 = TokenInfo {
-            name: String::from("name 2"),
-            symbol: String::from("NME2"),
-            decimals: 2,
-        };
-        token.update_info(new_info_2);
-
-        assert_eq!(token.info.name, String::from("name 2"));
-        assert_eq!(token.info.symbol, String::from("NME2"));
-        assert_eq!(token.info.decimals, 2);
     }
 }
